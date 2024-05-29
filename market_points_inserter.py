@@ -2,7 +2,7 @@ import psycopg2
 import csv
 
 # Connect to the PostgreSQL database
-conn = psycopg2.connect("dbname='postgres' user='kahler' host='localhost' password='3755'")
+conn = psycopg2.connect("dbname='term_project' user='kahler' host='localhost' password='3755'")
 cur = conn.cursor()
 
 # Open the CSV file and read data
@@ -16,6 +16,9 @@ with open('market_data.csv', 'r') as file:
         types = row.get('types')
         rating = row.get('rating')
         review_count = row.get('review_count')
+
+        # If table does not exist, create it
+        cur.execute("CREATE TABLE IF NOT EXISTS markets (id SERIAL PRIMARY KEY, name VARCHAR(255), geom GEOMETRY(POINT, 4326), types VARCHAR(255), rating FLOAT, review_count INTEGER);")
 
         # Check if all required fields are present
         if name and latitude and longitude and types and rating and review_count:
