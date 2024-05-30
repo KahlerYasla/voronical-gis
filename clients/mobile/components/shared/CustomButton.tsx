@@ -4,17 +4,17 @@ import { TouchableOpacity, Text, StyleSheet, TouchableOpacityProps, TextStyle, V
 import CustomText from './CustomText';
 
 interface CustomButtonProps extends TouchableOpacityProps {
-    title: string;
+    text: string;
     onPress: () => void;
     style?: ViewStyle;
     textStyle?: TextStyle;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ title, onPress, style, textStyle }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({ text, onPress, style, textStyle }) => {
     return (
         <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
             <CustomText style={[styles.text, textStyle]} boldness="bold">
-                {title}
+                {text}
             </CustomText>
         </TouchableOpacity>
     );

@@ -4,6 +4,7 @@ import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 
 import { logo } from '@/constants/VisualAssets';
 import CustomButton from '@/components/shared/CustomButton';
+import MapInputField from '@/components/map/MapInputField';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,7 +17,7 @@ const markers = [
 
 const Home = () => {
   const [showCreateMarketModal, setShowCreateMarketModal] = useState(false);
-
+  const [toggleVoronoi, setToggleVoronoi] = useState(false);
   const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
 
   const handleMapPress = (event: any) => {
@@ -69,12 +70,26 @@ const Home = () => {
       {/* floating button */}
       <View style={styles.addMarketButtonContainer}>
         <CustomButton
-          title="Go To"
+          text="Add Market"
           onPress={() => {
             // open a modal
             setShowCreateMarketModal(true);
           }}
           style={styles.addMarketButton}
+          textStyle={{ fontSize: 12 }}
+        />
+      </View>
+
+      {/* floating button */}
+      <View style={styles.toggleVoronoiButtonContainer}>
+        <CustomButton
+          text="Toggle Voronoi"
+          onPress={() => {
+            // open a modal
+            setToggleVoronoi(!toggleVoronoi);
+          }}
+          style={styles.addMarketButton}
+          textStyle={{ fontSize: 12 }}
         />
       </View>
 
@@ -86,13 +101,31 @@ const Home = () => {
           transparent={true}
         >
           <View style={styles.modal}>
-            <CustomButton
-              title="Close"
-              onPress={() => {
-                // close the modal
-                setShowCreateMarketModal(false);
-              }}
+
+            <MapInputField
+              label="Name"
+              placeholder="Market Name"
+              otherStyles={styles.inputField}
             />
+
+            <View style={styles.modalButtonsContainer}>
+              <CustomButton
+                text="Close"
+                onPress={() => {
+                  // close the modal
+                  setShowCreateMarketModal(false);
+                }}
+              />
+
+              <CustomButton
+                text="Add"
+                onPress={() => {
+                  // close the modal
+                  setShowCreateMarketModal(false);
+                }}
+              />
+            </View>
+
           </View>
         </Modal>
       )}
@@ -102,12 +135,16 @@ const Home = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red',
+    backgroundColor: 'black',
+    width: '100%',
+    height: '100%',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   map: {
+    flex: 1,
+    opacity: 0.8,
     width: width,
     height: height,
   },
@@ -136,8 +173,8 @@ const styles = StyleSheet.create({
     right: 20,
   },
   addMarketButton: {
-    height: 50,
-    borderRadius: 15,
+    height: 40,
+    borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -147,26 +184,40 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  toggleVoronoiButtonContainer: {
+    position: 'absolute',
+    zIndex: 5,
+    bottom: 20,
+    left: 20,
+  },
   modalContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
     width: width,
     height: height,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modal: {
     position: 'absolute',
-    top: '25%',
-    left: '8%',
-    width: width / 1.2,
-    height: height / 2,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    width: width,
+    height: height,
+    backgroundColor: 'rgba(0, 0, 0, 0.97)',
     borderRadius: 20,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+  },
+  inputField: {
+    width: '100%',
+  },
+  modalButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    gap: 20,
+    width: '100%',
   },
 });
 
