@@ -1,7 +1,6 @@
 // images
-const logo = require('../assets/images/app/logo.png');
+const logo = require('@/assets/images/logo.png');
 
 // icons
-const marketMarker = require('../assets/icons/market-marker.png');
 
-export { logo, marketMarker };
+export { logo };
