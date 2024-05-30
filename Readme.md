@@ -10,6 +10,6 @@ This is a repository for the Voronoi-based GIS project. The project has both mob
 
 ## System architecture
 <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-    <img src="./seq-diagram.drawio.svg" alt="Sequence Diagram" width="100%">
+    <img src="./assets/seq-diagram.drawio.svg" alt="Sequence Diagram" width="100%">
 </div>
 
