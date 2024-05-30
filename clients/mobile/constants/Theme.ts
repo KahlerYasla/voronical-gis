@@ -5,10 +5,10 @@ const COLORS = {
 };
 
 const FONT = {
-    regular: "UbuntuMonoRegular",
-    bold: "UbuntuMonoBold",
-    italic: "UbuntuMonoItalic",
-    boldItalic: "UbuntuMonoBoldItalic",
+    regular: "SpaceMono",
+    bold: "SpaceMono",
+    italic: "SpaceMono",
+    boldItalic: "SpaceMono",
 };
 
 const SHADOWS = {
