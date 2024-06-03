@@ -21,11 +21,10 @@ market_service = MarketService()
 class MarketRoute(Resource):
 
     @ns.expect(get_all_market_request)
-    def get(self):
+    def post(self):
         territory_id = request.args.get('territory_id', 1)
         
         # Call the market_service to retrieve all markets
         markets = market_service.get_all_markets(territory_id)
-        
-        # Return the markets as JSON response
+    
         return jsonify(markets)

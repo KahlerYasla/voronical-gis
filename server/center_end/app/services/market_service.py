@@ -8,8 +8,21 @@ class MarketService:
         db.session.commit()
         return market
 
+
     def get_all_markets(self, territory_id):
-        return Market.query.all()
+        markets = Market.query.all()
+    
+        markets_list = [{
+            'id': market.id,
+            'name': market.name,
+            'geom': market.format_geom(),
+            'types': market.types,
+            'rating': market.rating,
+            'review_count': market.review_count
+        } for market in markets]
+
+        return markets_list
+
 
     def voronialize_markets(self):
         # Voronialize the markets by calling from postgresql defined functions

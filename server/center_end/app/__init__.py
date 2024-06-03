@@ -14,7 +14,7 @@ def create_app():
     api.add_namespace(market_ns)
     api.add_namespace(navigation_ns)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///market.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kahler:3755@localhost:5432/term_project'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)

@@ -1,29 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Image, Modal } from 'react-native';
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 
+// constants
 import { logo } from '@/constants/VisualAssets';
+
+// components
 import CustomButton from '@/components/shared/CustomButton';
 import MapInputField from '@/components/map/MapInputField';
 
+// stores
+import { useMarketStore } from '@/stores/MarketStores';
+
+
 const { width, height } = Dimensions.get('window');
-
-const markers = [
-  { id: 1, latitude: 41.044248, longitude: 29.007288, color: 'red' },
-  { id: 2, latitude: 41.064, longitude: 29.009, color: 'blue' },
-  { id: 3, latitude: 41.044, longitude: 29.00, color: 'green' },
-];
-
 
 const Home = () => {
   const [showCreateMarketModal, setShowCreateMarketModal] = useState(false);
   const [toggleVoronoi, setToggleVoronoi] = useState(false);
   const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
 
+  const fetchMarkets = useMarketStore(state => state.fetchMarkets);
+  const markets = useMarketStore(state => state.markets);
+
+
+  const getRandomColor = () => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgba(${r},${g},${b},0.5)`;
+  }
+
+
   const handleMapPress = (event: any) => {
     const { coordinate } = event.nativeEvent;
     setPosition(coordinate);
   };
+
+
+  useEffect(() => {
+    fetchMarkets().then(() => {
+      console.log('Markets fetched');
+    }
+    );
+  }, []);
+
 
   return (
     <View style={styles.container}>
@@ -38,19 +59,18 @@ const Home = () => {
         }}
         provider={PROVIDER_DEFAULT}
       >
-        {markers.map(marker => (
+
+        {/* market locations */}
+        {markets.map((market, index) => (
           <Marker
-            key={marker.id}
-            coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
-            focusable={true}
-            title="Title"
-            description="Description"
-            style={styles.marker}
+            key={index}
+            pinColor='red'
+            coordinate={{
+              latitude: market.latitude,
+              longitude: market.longitude,
+            }}
           >
-            <Image
-              source={logo}
-              style={styles.markerImage}
-            />
+            <View style={[styles.marker, { backgroundColor: getRandomColor() }]} />
           </Marker>
         ))}
 
@@ -144,27 +164,21 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-    opacity: 0.8,
     width: width,
     height: height,
   },
   marker: {
-    width: 30,
-    height: 30,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    borderRadius: 12,
+    width: 12,
+    height: 10,
+    borderRadius: 100,
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-  },
-  markerImage: {
-    width: 20,
-    height: 20,
-    tintColor: "rgba(255, 255, 255, 0.7)",
-    alignSelf: 'center',
+    borderColor: 'black',
+    borderWidth: 1,
   },
   addMarketButtonContainer: {
     position: 'absolute',
