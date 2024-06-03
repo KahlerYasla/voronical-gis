@@ -28,7 +28,7 @@ const Home = () => {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
-    return `rgba(${r},${g},${b},0.5)`;
+    return `rgba(${r},${g},${b},1)`;
   }
 
 
@@ -51,12 +51,17 @@ const Home = () => {
       <MapView
         style={styles.map}
         onPress={handleMapPress}
-        initialRegion={{
-          latitude: 41.044,
-          longitude: 29.008,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+        camera={{
+          center: {
+            latitude: 41.044,
+            longitude: 29.008,
+          },
+          pitch: 40,
+          heading: 0,
+          altitude: 500,
+          zoom: 0,
         }}
+        mapType='mutedStandard'
         provider={PROVIDER_DEFAULT}
       >
 
@@ -65,19 +70,19 @@ const Home = () => {
           <Marker
             key={index}
             pinColor='red'
+            icon={0}
             coordinate={{
               latitude: market.latitude,
               longitude: market.longitude,
             }}
-          >
-            <View style={[styles.marker, { backgroundColor: getRandomColor() }]} />
-          </Marker>
+          />
         ))}
 
         { /* user location */}
         {position && (
           <Marker
             pinColor='black'
+            icon={0}
             coordinate={{
               latitude: position.latitude,
               longitude: position.longitude,
@@ -168,8 +173,8 @@ const styles = StyleSheet.create({
     height: height,
   },
   marker: {
-    width: 12,
-    height: 11,
+    width: 10,
+    height: 9,
     borderRadius: 100,
     justifyContent: 'center',
     shadowColor: '#000',
