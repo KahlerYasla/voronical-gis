@@ -116,6 +116,7 @@ const Home = () => {
                 style={{ width: 15, height: 15 }}
               />
             </View>
+            <Text style={styles.marketPin}>▼</Text>
           </Marker>
         )}
       </MapView>
@@ -199,21 +200,22 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   locationMarkerContainer: {
-    width: 30,
-    height: 30,
+    marginBottom: 0,
+    padding: 3,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 13,
+    borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.75,
+    shadowOpacity: 1,
     shadowRadius: 20,
     elevation: 5,
   },
   marketMarkerContainer: {
-    marginBottom: -4,
-    width: 120,
+    marginBottom: -5,
+    width: 'auto',
+    paddingHorizontal: 6,
     height: 15,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderRadius: 13,
@@ -226,6 +228,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   marketPin: {
+    marginTop: -5,
     color: 'rgba(0, 0, 0, 0.7)',
     textAlign: 'center',
     fontSize: 16,
