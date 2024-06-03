@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   marker: {
     width: 12,
-    height: 10,
+    height: 11,
     borderRadius: 100,
     justifyContent: 'center',
     shadowColor: '#000',
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: .2,
   },
   addMarketButtonContainer: {
     position: 'absolute',
