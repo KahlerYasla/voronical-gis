@@ -21,11 +21,6 @@ def create_app():
     db.init_app(app)
     api.init_app(app)
 
-    return app
-
-if __name__ == '__main__':
     Logger.log('I love Voroni 🐶', 'blue')
 
-    port = int(os.environ.get("PORT", 9300))
-    app = create_app()
-    app.run(host='0.0.0.0', port=port)
+    return app

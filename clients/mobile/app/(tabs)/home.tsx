@@ -22,6 +22,7 @@ const Home = () => {
   const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
   const [showButtons, setShowButtons] = useState(false);
   const [name, setName] = useState('');
+  const [lineCoordinates, setLineCoordinates] = useState([] as any);
 
   // stores
   const markets = useMarketStore(state => state.markets);
@@ -35,19 +36,19 @@ const Home = () => {
   };
 
 
-  const getMyLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    })
-      .then(location => {
-        setPosition(location);
-      })
-      .catch(error => {
-        const { code, message } = error;
-        // console.warn(code, message);
-      });
-  }
+  // const getMyLocation = () => {
+  //   GetLocation.getCurrentPosition({
+  //     enableHighAccuracy: true,
+  //     timeout: 15000,
+  //   })
+  //     .then(location => {
+  //       setPosition(location);
+  //     })
+  //     .catch(error => {
+  //       const { code, message } = error;
+  //       // console.warn(code, message);
+  //     });
+  // }
 
 
   const toggleButtons = () => {
@@ -56,16 +57,51 @@ const Home = () => {
 
 
   const buttonData = [
-    { text: 'Go to My Location', onPress: () => console.log('My Location') },
     { text: 'Toggle Voronoi', onPress: () => setToggleVoronoi(!toggleVoronoi) },
+    { text: 'Go to My Location', onPress: () => console.log('My Location') },
     {
       text: 'Create Market at Star Point', onPress: () => {
         setShowCreateMarketModal(true);
         setShowButtons(false);
       }
     },
-    { text: 'Navigate Nearest Market', onPress: () => console.log('Navigate Nearest Market') },
-    { text: 'Navigate Selected Market', onPress: () => console.log('Navigate Selected Market') },
+    {
+      text: 'Navigate from Star to Nearest Market', onPress: () => {
+        console.log('Navigate Nearest Market');
+        const nearestMarket = markets.reduce((prev, current) => {
+          const prevDistance = Math.sqrt(
+            Math.pow(prev.latitude - position.latitude, 2) +
+            Math.pow(prev.longitude - position.longitude, 2)
+          );
+
+          const currentDistance = Math.sqrt(
+            Math.pow(current.latitude - position.latitude, 2) +
+            Math.pow(current.longitude - position.longitude, 2)
+          );
+
+          return prevDistance < currentDistance ? prev : current;
+        });
+
+        setLineCoordinates([
+          {
+            latitude: position.latitude,
+            longitude: position.longitude,
+          },
+          {
+            latitude: nearestMarket.latitude,
+            longitude: nearestMarket.longitude
+          }
+        ]);
+      }
+    },
+    {
+      text: 'Navigate from Star to Selected Market', onPress: () => {
+        // list markets and select one to navigate
+        console.log('Navigate Selected Market');
+
+
+      }
+    },
   ];
 
 
@@ -77,9 +113,9 @@ const Home = () => {
   }, []);
 
 
-  useEffect(() => {
-    getMyLocation();
-  }, []);
+  // useEffect(() => {
+  //   getMyLocation();
+  // }, []);
 
 
   return (
@@ -153,13 +189,7 @@ const Home = () => {
 
         {/* navigation */}
         <Polyline
-          coordinates={[
-            { latitude: 41.044, longitude: 29.008 },
-            { latitude: 41.046, longitude: 29.004 },
-            { latitude: 41.048, longitude: 29.009 },
-            { latitude: 41.050, longitude: 29.008 },
-            { latitude: 41.052, longitude: 29.010 },
-          ]}
+          coordinates={lineCoordinates}
           strokeWidth={8}
           lineCap='square'
           lineJoin='round'
