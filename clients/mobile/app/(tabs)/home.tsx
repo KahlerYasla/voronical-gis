@@ -57,16 +57,24 @@ const Home = () => {
 
 
   const buttonData = [
-    { text: 'Toggle Voronoi', onPress: () => setToggleVoronoi(!toggleVoronoi) },
-    { text: 'Go to My Location', onPress: () => console.log('My Location') },
     {
-      text: 'Create Market at Star Point', onPress: () => {
+      text: 'Toggle Voronoi',
+      onPress: () => setToggleVoronoi(!toggleVoronoi)
+    },
+    {
+      text: 'Go to My Location',
+      onPress: () => console.log('My Location')
+    },
+    {
+      text: 'Create Market at Star Point',
+      onPress: () => {
         setShowCreateMarketModal(true);
         setShowButtons(false);
       }
     },
     {
-      text: 'Navigate from Star to Nearest Market', onPress: () => {
+      text: 'Navigate from Star to Nearest Market',
+      onPress: () => {
         console.log('Navigate Nearest Market');
         const nearestMarket = markets.reduce((prev, current) => {
           const prevDistance = Math.sqrt(
@@ -95,7 +103,8 @@ const Home = () => {
       }
     },
     {
-      text: 'Navigate from Star to Selected Market', onPress: () => {
+      text: 'Navigate from Star to Selected Market',
+      onPress: () => {
         // list markets and select one to navigate
         console.log('Navigate Selected Market');
 

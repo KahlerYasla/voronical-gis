@@ -6,23 +6,43 @@ export interface LineString {
     coordinates: number[][];
 }
 
-interface CreateMarketRequest {
-    name: string;
-    geom: string;
+interface NavigationRequest {
+    from: string;
+    to: string;
 }
 
-export interface MarketStore {
-    markets: Market[];
-    setMarkets: (markets: Market[]) => Promise<boolean>;
-    createMarket: (market: CreateMarketRequest) => Promise<boolean>;
-    fetchMarkets: () => Promise<boolean>;
+export interface NavigationStore {
+    navigateToMarket: (from: string, to: string) => Promise<LineString>;
 }
 
-export const useMarketStore = create<MarketStore>((set) => ({
-    markets: [],
+export const useNavigationStore = create<NavigationStore>((set) => ({
+    lineString: { coordinates: [] },
 
-
-    navigateToMarket: (from: string, to: string) => {
+    navigateToMarket: async (from: string, to: string) => {
         console.log(from, to);
+
+        const url = `${API_BASE_URL}/navigation`;
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+        const navigationData: NavigationRequest = {
+            from,
+            to
+        };
+
+        axios.post<LineString>(url, navigationData, { headers })
+            .then(response => {
+                console.log(response.data);
+                return response.data;
+            })
+            .catch(error => {
+                const axiosError = error as AxiosError;
+                console.error(axiosError.message);
+                console.error(axiosError.response?.data);
+                console.error(axiosError.response?.status);
+            });
+
+        return { coordinates: [] };
     },
 }));

@@ -10,11 +10,32 @@ ns = Namespace('navigation', description='navigation functionalities')
 
 # Request models
 get_shortest_path_request = ns.model('GetShortestPathRequest', {
-    'startLocationYX': fields.List(fields.Float, required=True,
-                                    description='The starting location in the format [latitude, longitude]'),
-    'endMarketId': fields.Integer(required=True, 
-                                    description='The ID of the market where the navigation ends')
+    'from': fields.String(required=True, description='The starting point of the path'),
+    'to': fields.String(required=True, description='The destination point of the path')
 })
 
 # Create an instance of the NavigationService
 navigation_service = NavigationService()
+
+@ns.route('/shortest-path')
+class NavigationRoute(Resource):
+    @ns.expect(get_shortest_path_request)
+    def post(self):
+        # Get the request body
+        start = request.get_json().get('from')
+        end = request.get_json().get('to')
+
+        # Call the navigation_service to find the shortest path
+        path = navigation_service.get_shortest_path(start, end)
+
+        return jsonify(path)
+    
+
+@ns.route('/voronoi')
+class NavigationRoute(Resource):
+    def get(self):
+        # Call the navigation_service to get the voronoi diagram
+        voronoi = navigation_service.get_voronoi_diagram()
+
+        return jsonify(voronoi)
+    
