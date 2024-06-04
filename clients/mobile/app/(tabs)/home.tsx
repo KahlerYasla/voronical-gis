@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Modal, TouchableOpacity, Text, Animated, Image } from 'react-native';
+
 import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Animatable from 'react-native-animatable';
+import GetLocation from 'react-native-get-location';
 
 // constants
 import { logo, starIcon } from '@/constants/VisualAssets';
@@ -37,6 +39,21 @@ const Home = () => {
   };
 
 
+  const getMyLocation = () => {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        setPosition(location);
+      })
+      .catch(error => {
+        const { code, message } = error;
+        // console.warn(code, message);
+      });
+  }
+
+
   const toggleButtons = () => {
     setShowButtons(!showButtons);
   };
@@ -56,6 +73,11 @@ const Home = () => {
       console.log('Markets fetched');
     }
     );
+  }, []);
+
+
+  useEffect(() => {
+    getMyLocation();
   }, []);
 
 
@@ -118,7 +140,6 @@ const Home = () => {
                 style={{ width: 15, height: 15 }}
               />
             </View>
-            <Text style={styles.marketPin}>▼</Text>
           </Marker>
         )}
       </MapView>
@@ -217,8 +238,8 @@ const styles = StyleSheet.create({
   },
   marketMarkerContainer: {
     width: 'auto',
-    paddingHorizontal: 6,
-    height: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
     borderRadius: 13,
     justifyContent: 'center',
