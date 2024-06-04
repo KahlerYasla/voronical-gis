@@ -14,6 +14,7 @@ get_shortest_path_request = ns.model('GetShortestPathRequest', {
     'to': fields.String(required=True, description='The destination point of the path')
 })
 
+
 # Create an instance of the NavigationService
 navigation_service = NavigationService()
 

@@ -54,6 +54,8 @@ class NavigationService:
         # Fetch all results
         path = result.fetchall()
 
+        print(path)
+
         return path
 
 
@@ -73,6 +75,8 @@ class NavigationService:
 
         result = db.session.execute(query, {'latitude': latitude, 'longitude': longitude})
         closest_market_id = result.fetchone()[0]
+
+        print(closest_market_id)
         
         return closest_market_id
     
@@ -85,5 +89,7 @@ class NavigationService:
 
         result = db.session.execute(query)
         voronoi = result.fetchone()[0]
+
+        print(voronoi)
 
         return voronoi
