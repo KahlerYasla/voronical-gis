@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, Modal, TouchableOpacity, Text, Animated, Image } from 'react-native';
+import { View, StyleSheet, Modal, TouchableOpacity, Text, Image } from 'react-native';
 
-import MapView, { Marker, PROVIDER_DEFAULT } from 'react-native-maps';
+import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Animatable from 'react-native-animatable';
 import GetLocation from 'react-native-get-location';
 
@@ -21,16 +21,12 @@ const Home = () => {
   const [toggleVoronoi, setToggleVoronoi] = useState(false);
   const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
   const [showButtons, setShowButtons] = useState(false);
-  const fetchMarkets = useMarketStore(state => state.fetchMarkets);
+  const [name, setName] = useState('');
+
+  // stores
   const markets = useMarketStore(state => state.markets);
-
-
-  // const getRandomColor = () => {
-  //   const r = Math.floor(Math.random() * 256);
-  //   const g = Math.floor(Math.random() * 20);
-  //   const b = Math.floor(Math.random() * 0);
-  //   return `rgba(${r},${g},${b},1)`;
-  // }
+  const fetchMarkets = useMarketStore(state => state.fetchMarkets);
+  const createMarket = useMarketStore(state => state.createMarket);
 
 
   const handleMapPress = (event: any) => {
@@ -62,7 +58,12 @@ const Home = () => {
   const buttonData = [
     { text: 'Go to My Location', onPress: () => console.log('My Location') },
     { text: 'Toggle Voronoi', onPress: () => setToggleVoronoi(!toggleVoronoi) },
-    { text: 'Add Market to the Star Point', onPress: () => setShowCreateMarketModal(true) },
+    {
+      text: 'Create Market at Star Point', onPress: () => {
+        setShowCreateMarketModal(true);
+        setShowButtons(false);
+      }
+    },
     { text: 'Navigate Nearest Market', onPress: () => console.log('Navigate Nearest Market') },
     { text: 'Navigate Selected Market', onPress: () => console.log('Navigate Selected Market') },
   ];
@@ -142,6 +143,20 @@ const Home = () => {
             </View>
           </Marker>
         )}
+
+        {/* navigation */}
+        <Polyline
+          coordinates={[
+            { latitude: 41.044, longitude: 29.008 },
+            { latitude: 41.040, longitude: 29.004 },
+            { latitude: 41.038, longitude: 29.006 },
+            { latitude: 41.036, longitude: 29.008 },
+            { latitude: 41.034, longitude: 29.010 },
+          ]}
+          strokeColor="black" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeWidth={3}
+        />
+
       </MapView>
 
       {/* Floating buttons */}
@@ -170,7 +185,6 @@ const Home = () => {
       {/* modal */}
       {showCreateMarketModal && (
         <Modal
-          style={styles.modalContainer}
           animationType="fade"
           transparent={true}
         >
@@ -180,6 +194,8 @@ const Home = () => {
               label="Name"
               placeholder="Market Name"
               otherStyles={styles.inputField}
+              value={name}
+              onChangeText={setName}
             />
 
             <View style={styles.modalButtonsContainer}>
@@ -195,7 +211,10 @@ const Home = () => {
                 text="Add"
                 onPress={() => {
                   // close the modal
-                  setShowCreateMarketModal(false);
+                  createMarket({ name: name, geom: `${position.latitude},${position.longitude}` }).then(() => {
+                    setShowCreateMarketModal(false);
+                    fetchMarkets();
+                  });
                 }}
               />
             </View>
@@ -281,23 +300,18 @@ const styles = StyleSheet.create({
   floatingButton: {
     height: 40,
     borderRadius: 10,
-    backgroundColor: 'rgba(0, 0, 0, 1)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, .7)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modal: {
     position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 0, 0.97)',
+    bottom: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.90)',
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'flex-end',
+    width: '100%',
     paddingVertical: 50,
     paddingHorizontal: 20,
   },

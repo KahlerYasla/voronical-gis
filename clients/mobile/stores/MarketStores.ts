@@ -12,9 +12,15 @@ export interface Market {
     longitude: number;
 }
 
+interface CreateMarketRequest {
+    name: string;
+    geom: string;
+}
+
 export interface MarketStore {
     markets: Market[];
     setMarkets: (markets: Market[]) => Promise<boolean>;
+    createMarket: (market: CreateMarketRequest) => Promise<boolean>;
     fetchMarkets: () => Promise<boolean>;
 }
 
@@ -24,6 +30,33 @@ export const useMarketStore = create<MarketStore>((set) => ({
 
     setMarkets: async (markets) => {
         set({ markets });
+        return true;
+    },
+
+
+    createMarket: async (market) => {
+        const url = `${API_BASE_URL}/market/create`;
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        const marketData = {
+            name: market.name,
+            location: market.geom
+        };
+
+        try {
+            console.log(marketData);
+            const response = await axios.post<Market>(url, marketData, { headers });
+            console.log(response.data);
+        } catch (error) {
+            const axiosError = error as AxiosError;
+            console.error(axiosError.message);
+            console.error(axiosError.response?.data);
+            console.error(axiosError.response?.status);
+        }
+
         return true;
     },
 

@@ -1,9 +1,18 @@
 from app.configs.extensions import db
 from app.models.market import Market
 
+from app.utils.logger import Logger
 class MarketService:
     def create_market(self, name, location):
-        market = Market(name=name, location=location)
+        # Location is a string in the format 'latitude,longitude'. Convert it to a WKBElement
+        location = location.split(',')
+        Logger.break_double_line()
+
+        location = f'POINT({location[1]} {location[0]})'
+        print(location)
+        Logger.break_double_line()
+
+        market = Market(name=name, geom=location)
         db.session.add(market)
         db.session.commit()
         return market
