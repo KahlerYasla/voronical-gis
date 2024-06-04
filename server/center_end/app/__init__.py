@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 
 from app.configs.extensions import api
@@ -20,6 +21,11 @@ def create_app():
     db.init_app(app)
     api.init_app(app)
 
+    return app
+
+if __name__ == '__main__':
     Logger.log('I love Voroni 🐶', 'blue')
 
-    return app
+    port = int(os.environ.get("PORT", 9300))
+    app = create_app()
+    app.run(host='0.0.0.0', port=port)

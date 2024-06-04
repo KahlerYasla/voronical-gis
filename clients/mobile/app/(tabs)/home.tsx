@@ -119,7 +119,10 @@ const Home = () => {
             }}
           >
             <View style={styles.marketMarkerContainer}>
-              <CustomText children={market.name} style={{ fontSize: 10, color: "white" }} />
+              <CustomText children={market.name} style={{
+                fontSize: 10,
+                color: "white"
+              }} />
             </View>
             <Text style={styles.marketPin}>▼</Text>
           </Marker>
@@ -128,7 +131,6 @@ const Home = () => {
         { /* user location */}
         {position && (
           <Marker
-            pinColor='black'
             style={styles.markerContainer}
             coordinate={{
               latitude: position.latitude,
@@ -138,8 +140,13 @@ const Home = () => {
             <View style={styles.locationMarkerContainer}>
               <Image
                 source={starIcon}
-                style={{ width: 15, height: 15 }}
+                style={{
+                  width: 15,
+                  height: 15,
+                  tintColor: 'white',
+                }}
               />
+
             </View>
           </Marker>
         )}
@@ -148,13 +155,14 @@ const Home = () => {
         <Polyline
           coordinates={[
             { latitude: 41.044, longitude: 29.008 },
-            { latitude: 41.040, longitude: 29.004 },
-            { latitude: 41.038, longitude: 29.006 },
-            { latitude: 41.036, longitude: 29.008 },
-            { latitude: 41.034, longitude: 29.010 },
+            { latitude: 41.046, longitude: 29.004 },
+            { latitude: 41.048, longitude: 29.009 },
+            { latitude: 41.050, longitude: 29.008 },
+            { latitude: 41.052, longitude: 29.010 },
           ]}
-          strokeColor="black" // fallback for when `strokeColors` is not supported by the map-provider
-          strokeWidth={3}
+          strokeWidth={8}
+          lineCap='square'
+          lineJoin='round'
         />
 
       </MapView>
