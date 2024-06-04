@@ -89,6 +89,7 @@ const Home = () => {
         {markets.map((market, index) => (
           <Marker
             key={index}
+            style={styles.markerContainer}
             coordinate={{
               latitude: market.latitude,
               longitude: market.longitude,
@@ -105,6 +106,7 @@ const Home = () => {
         {position && (
           <Marker
             pinColor='black'
+            style={styles.markerContainer}
             coordinate={{
               latitude: position.latitude,
               longitude: position.longitude,
@@ -199,21 +201,21 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  markerContainer: {
+  },
   locationMarkerContainer: {
-    marginBottom: 0,
-    padding: 3,
+    padding: 5,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 3,
+    borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: 'black',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
-    shadowRadius: 20,
+    shadowRadius: 10,
     elevation: 5,
   },
   marketMarkerContainer: {
-    marginBottom: -5,
     width: 'auto',
     paddingHorizontal: 6,
     height: 15,
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   marketPin: {
-    marginTop: -5,
+    marginTop: 0,
     color: 'rgba(0, 0, 0, 0.7)',
     textAlign: 'center',
     fontSize: 16,
