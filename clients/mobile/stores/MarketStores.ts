@@ -72,8 +72,8 @@ export const useMarketStore = create<MarketStore>((set) => ({
         };
 
         try {
-            const response = await axios.post<Market[]>(url, { headers, data }
-            );
+            const response = await axios.post<Market[]>(url, { headers, data });
+
             response.data.forEach((market: Market) => {
                 market.longitude = parseFloat(market.geom.split(',')[1]);
                 market.latitude = parseFloat(market.geom.split(',')[0]);

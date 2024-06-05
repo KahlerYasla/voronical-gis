@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, Text, Image } from 'react-native';
-
 import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Animatable from 'react-native-animatable';
-import GetLocation from 'react-native-get-location';
 
 // constants
 import { logo, starIcon } from '@/constants/VisualAssets';
@@ -14,6 +12,7 @@ import MapInputField from '@/components/map/MapInputField';
 
 // stores
 import { useMarketStore } from '@/stores/MarketStores';
+import { useNavigationStore } from '@/stores/NavigationStores';
 import CustomText from '@/components/shared/CustomText';
 
 const Home = () => {
@@ -22,39 +21,23 @@ const Home = () => {
   const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
   const [showButtons, setShowButtons] = useState(false);
   const [name, setName] = useState('');
-  const [lineCoordinates, setLineCoordinates] = useState([] as any);
 
   // stores
   const markets = useMarketStore(state => state.markets);
   const fetchMarkets = useMarketStore(state => state.fetchMarkets);
   const createMarket = useMarketStore(state => state.createMarket);
 
+  const lineString = useNavigationStore(state => state.lineString);
+  const navigateToMarket = useNavigationStore(state => state.navigateToMarket);
 
   const handleMapPress = (event: any) => {
     const { coordinate } = event.nativeEvent;
     setPosition(coordinate);
   };
 
-
-  // const getMyLocation = () => {
-  //   GetLocation.getCurrentPosition({
-  //     enableHighAccuracy: true,
-  //     timeout: 15000,
-  //   })
-  //     .then(location => {
-  //       setPosition(location);
-  //     })
-  //     .catch(error => {
-  //       const { code, message } = error;
-  //       // console.warn(code, message);
-  //     });
-  // }
-
-
   const toggleButtons = () => {
     setShowButtons(!showButtons);
   };
-
 
   const buttonData = [
     {
@@ -74,7 +57,7 @@ const Home = () => {
     },
     {
       text: 'Navigate from Star to Nearest Market',
-      onPress: () => {
+      onPress: async () => {
         console.log('Navigate Nearest Market');
         const nearestMarket = markets.reduce((prev, current) => {
           const prevDistance = Math.sqrt(
@@ -90,20 +73,12 @@ const Home = () => {
           return prevDistance < currentDistance ? prev : current;
         });
 
-        setLineCoordinates([
-          {
-            latitude: position.latitude,
-            longitude: position.longitude,
-          },
-          {
-            latitude: nearestMarket.latitude - 0.001,
-            longitude: nearestMarket.longitude - 0.001
-          },
-          {
-            latitude: nearestMarket.latitude,
-            longitude: nearestMarket.longitude
-          }
-        ]);
+        navigateToMarket({
+          start: `${position.latitude} ${position.longitude}`,
+          end: `${nearestMarket.latitude} ${nearestMarket.longitude}`,
+        });
+
+        setShowButtons(false);
       }
     },
     {
@@ -111,31 +86,20 @@ const Home = () => {
       onPress: () => {
         // list markets and select one to navigate
         console.log('Navigate Selected Market');
-
-
       }
     },
   ];
 
-
   useEffect(() => {
     fetchMarkets().then(() => {
       console.log('Markets fetched');
-    }
-    );
+    });
   }, []);
-
-
-  // useEffect(() => {
-  //   getMyLocation();
-  // }, []);
-
 
   return (
     <View style={styles.container}>
       <MapView
         style={styles.map}
-
         onPress={handleMapPress}
         camera={{
           center: {
@@ -151,7 +115,6 @@ const Home = () => {
         loadingIndicatorColor="red"
         maxDelta={0.01}
         mapType='mutedStandard'
-
         rotateEnabled={false}
         zoomEnabled={false}
         provider={PROVIDER_DEFAULT}
@@ -177,7 +140,7 @@ const Home = () => {
           </Marker>
         ))}
 
-        { /* user location */}
+        {/* user location */}
         {position && (
           <Marker
             style={styles.markerContainer}
@@ -195,19 +158,22 @@ const Home = () => {
                   tintColor: 'white',
                 }}
               />
-
             </View>
           </Marker>
         )}
 
         {/* navigation */}
         <Polyline
-          coordinates={lineCoordinates}
+          coordinates={lineString.coordinates.map((coord) => (
+            {
+              latitude: coord[0],
+              longitude: coord[1],
+            }
+          ))}
           strokeWidth={8}
           lineCap='square'
           lineJoin='round'
         />
-
       </MapView>
 
       {/* Floating buttons */}
@@ -240,7 +206,6 @@ const Home = () => {
           transparent={true}
         >
           <View style={styles.modal}>
-
             <MapInputField
               label="Name"
               placeholder="Market Name"
@@ -269,7 +234,6 @@ const Home = () => {
                 }}
               />
             </View>
-
           </View>
         </Modal>
       )}
@@ -292,8 +256,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  markerContainer: {
-  },
+  markerContainer: {},
   locationMarkerContainer: {
     padding: 5,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',

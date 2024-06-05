@@ -7,42 +7,55 @@ export interface LineString {
 }
 
 interface NavigationRequest {
-    from: string;
-    to: string;
+    start: string;
+    end: string;
 }
 
 export interface NavigationStore {
-    navigateToMarket: (from: string, to: string) => Promise<LineString>;
+    lineString: LineString;
+    navigateToMarket: (from: NavigationRequest) => Promise<LineString>;
 }
 
 export const useNavigationStore = create<NavigationStore>((set) => ({
     lineString: { coordinates: [] },
 
-    navigateToMarket: async (from: string, to: string) => {
-        console.log(from, to);
+    navigateToMarket: async (req: NavigationRequest) => {
+        console.log("req: ", req);
 
-        const url = `${API_BASE_URL}/navigation`;
+        const url = `${API_BASE_URL}/navigation/shortest-path`;
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         };
-        const navigationData: NavigationRequest = {
-            from,
-            to
+        const requestData = {
+            "from": req.start,
+            "to": req.end
         };
 
-        axios.post<LineString>(url, navigationData, { headers })
-            .then(response => {
-                console.log(response.data);
-                return response.data;
-            })
-            .catch(error => {
-                const axiosError = error as AxiosError;
-                console.error(axiosError.message);
-                console.error(axiosError.response?.data);
-                console.error(axiosError.response?.status);
-            });
+        try {
+            const response = await axios.post(url, requestData, { headers });
 
-        return { coordinates: [] };
+            console.log("API Response:", response.data);
+
+            if (Array.isArray(response.data)) {
+                const coordinates = response.data.map((point: { latitude: number; longitude: number }) => [point.latitude, point.longitude]);
+                const lineString: LineString = { coordinates };
+
+                set({ lineString });
+
+                console.log("LineString:", lineString);
+                return lineString;
+            } else {
+                console.error("Invalid response structure:", response.data);
+                return { coordinates: [] };
+            }
+
+        } catch (error) {
+            const axiosError = error as AxiosError;
+            console.error("Axios Error:", axiosError.message);
+            console.error("Response Data:", axiosError.response?.data);
+            console.error("Status Code:", axiosError.response?.status);
+            return { coordinates: [] };
+        }
     },
 }));

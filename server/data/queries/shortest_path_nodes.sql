@@ -11,10 +11,9 @@ market_edge AS (
         ST_Distance(the_geom, ml.geom) AS dist
     FROM edges,
         market_location ml
-    ORDER BY ml.geom <-> the_geom
+    ORDER BY ml.geom <->the_geom
     LIMIT 1
-),
-user_location AS (
+), user_location AS (
     SELECT ST_SetSRID(ST_MakePoint(29.007087, 41.042127), 4326) AS geom
 ),
 user_edge AS (
@@ -25,10 +24,9 @@ user_edge AS (
         ST_Distance(the_geom, ul.geom) AS dist
     FROM edges,
         user_location ul
-    ORDER BY ul.geom <-> the_geom
+    ORDER BY ul.geom <->the_geom
     LIMIT 1
-),
-path_edges AS (
+), path_edges AS (
     SELECT e.id,
         e.source,
         e.target,
@@ -47,31 +45,19 @@ path_edges AS (
             ),
             directed := false
         ) AS d
-    JOIN edges AS e ON d.edge = e.id
+        JOIN edges AS e ON d.edge = e.id
     ORDER BY d.seq
 ),
-start_points AS (
-    SELECT seq,
-           ST_X(start_geom) AS longitude,
-           ST_Y(start_geom) AS latitude,
-           start_geom AS geom
-    FROM path_edges
-),
-end_points AS (
-    SELECT seq + 0.5 AS seq,
-           ST_X(end_geom) AS longitude,
-           ST_Y(end_geom) AS latitude,
-           end_geom AS geom
+points AS (
+    SELECT seq * 2 - 1 AS seq,
+        ST_X(start_geom) AS longitude,
+        ST_Y(start_geom) AS latitude,
+        start_geom AS geom
     FROM path_edges
 )
-SELECT row_number() OVER () AS uid,
-       seq,
-       latitude,
-       longitude,
-       geom
-FROM (
-    SELECT * FROM start_points
-    UNION ALL
-    SELECT * FROM end_points
-) AS points
+SELECT row_number() OVER () AS seq,
+    geom,
+    latitude,
+    longitude
+FROM points
 ORDER BY seq;
