@@ -96,6 +96,10 @@ const Home = () => {
             longitude: position.longitude,
           },
           {
+            latitude: nearestMarket.latitude - 0.001,
+            longitude: nearestMarket.longitude - 0.001
+          },
+          {
             latitude: nearestMarket.latitude,
             longitude: nearestMarket.longitude
           }
