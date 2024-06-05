@@ -1,4 +1,4 @@
--- Define the given location as a point geometry (example coordinates: latitude and longitude)
+-- Define the given location as a point geometry (latitude and longitude)
 WITH given_location AS (
     SELECT ST_SetSRID(ST_MakePoint(29.007087, 41.042127), 4326) AS geom
 ) -- Find the closest market
