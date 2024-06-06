@@ -274,13 +274,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: 13,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 1,
-    shadowRadius: 20,
     elevation: 5,
   },
   marketPin: {
