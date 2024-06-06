@@ -15,6 +15,10 @@ get_shortest_path_request = ns.model('GetShortestPathRequest', {
     'to': fields.String(required=True, description='The destination point of the path')
 })
 
+get_nearest_market_request = ns.model('GetNearestMarketRequest', {
+    'from': fields.String(required=True, description='The starting point of the path'),
+})
+
 
 # Create an instance of the NavigationService
 navigation_service = NavigationService()
@@ -26,6 +30,30 @@ class NavigationRoute(Resource):
         # Get the request body
         start = request.get_json().get('from')
         end = request.get_json().get('to')
+
+        print(start)
+        Logger.break_line_without_newline()
+        print(end)
+
+        Logger.break_double_line()
+        print(start, end)
+        Logger.break_double_line()
+
+        # Call the navigation_service to find the shortest path
+        path = navigation_service.get_shortest_path(start, end)
+
+        return jsonify(path)
+    
+
+@ns.route('/nearest-market')
+class NavigationRoute(Resource):
+    @ns.expect(get_nearest_market_request)
+    def post(self):
+        # Get the request body
+        start = request.get_json().get('from')
+
+        # find the nearest market
+        end = navigation_service.get_nearest_market(start)
 
         print(start)
         Logger.break_line_without_newline()

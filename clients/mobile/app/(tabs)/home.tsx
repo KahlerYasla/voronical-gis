@@ -29,6 +29,7 @@ const Home = () => {
 
   const lineString = useNavigationStore(state => state.lineString);
   const navigateToMarket = useNavigationStore(state => state.navigateToMarket);
+  const navigateToNearestMarket = useNavigationStore(state => state.navigateToNearestMarket);
 
   const handleMapPress = (event: any) => {
     const { coordinate } = event.nativeEvent;
@@ -59,23 +60,10 @@ const Home = () => {
       text: 'Navigate from Star to Nearest Market',
       onPress: async () => {
         console.log('Navigate Nearest Market');
-        const nearestMarket = markets.reduce((prev, current) => {
-          const prevDistance = Math.sqrt(
-            Math.pow(prev.latitude - position.latitude, 2) +
-            Math.pow(prev.longitude - position.longitude, 2)
-          );
 
-          const currentDistance = Math.sqrt(
-            Math.pow(current.latitude - position.latitude, 2) +
-            Math.pow(current.longitude - position.longitude, 2)
-          );
-
-          return prevDistance < currentDistance ? prev : current;
-        });
-
-        navigateToMarket({
+        navigateToNearestMarket({
           start: `${position.latitude} ${position.longitude}`,
-          end: `${nearestMarket.latitude} ${nearestMarket.longitude}`,
+          end: null,
         });
 
         setShowButtons(false);
@@ -84,8 +72,7 @@ const Home = () => {
     {
       text: 'Navigate from Star to Selected Market',
       onPress: () => {
-        // list markets and select one to navigate
-        console.log('Navigate Selected Market');
+
       }
     },
   ];

@@ -116,3 +116,41 @@ class NavigationService:
 
         return nodes
 
+
+    @staticmethod
+    def get_nearest_market(location):
+        location = location.split(' ')
+
+        # Unpack location
+        latitude = location[0]
+        longitude = location[1]
+
+        # Define the SQL query
+        query = text(f"""
+            SELECT id,
+                name,
+                ST_X(geom) AS longitude,
+                ST_Y(geom) AS latitude
+            FROM markets
+            ORDER BY geom <-> ST_SetSRID(ST_MakePoint({longitude}, {latitude}), 4326)
+            LIMIT 1;
+        """)
+
+        result = None
+
+        # Create a new session
+        with Session(db.engine) as session:
+            print(query)
+
+            # Execute the query and fetch the first result
+            result = session.execute(query).fetchone()
+            print(result)
+
+        market = {
+            "latitude": result[3],
+            "longitude": result[2],
+        }
+
+        print(market)
+
+        return market
