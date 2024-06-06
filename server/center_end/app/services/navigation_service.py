@@ -1,3 +1,5 @@
+from app.utils.logger import Logger
+
 from flask import Flask, jsonify, request
 from sqlalchemy.sql import text
 from sqlalchemy.orm import Session
@@ -8,9 +10,18 @@ app = Flask(__name__)
 class NavigationService:
     @staticmethod
     def get_shortest_path(start_location, end_location):
-        print(start_location)
-        print(end_location)
+        if end_location == None:
+            # get the nearest market
+            end_location =  NavigationService.get_nearest_market(start_location)
+            market_id = end_location['id']
+            end_location = f"{end_location['latitude']} {end_location['longitude']}"
 
+        Logger.break_line()
+        Logger.log("Shortest Path Flow: ", "red")
+
+        print("Start Location: ", start_location)
+        print("End Location: ", end_location)
+        
         start_location = start_location.split(' ')
         end_location = end_location.split(' ')
 
@@ -22,18 +33,20 @@ class NavigationService:
         end_latitude = end_location[0]
         end_longitude = end_location[1]
 
-        print(start_latitude)
-        print(start_longitude)
+        Logger.break_line()
+        Logger.log("Start latitude, longitude: ", "red")
+        print(start_latitude + ", " + start_longitude)
 
-        print(end_latitude)
-        print(end_longitude)
+        Logger.break_line()
+        Logger.log("End latitude, longitude: ", "red")
+        print(end_latitude + ", " + end_longitude)
 
         # Define the SQL query
         query = text(f"""
             WITH market_location AS (
                 SELECT geom
                 FROM markets
-                WHERE id = 20
+                WHERE id = {market_id}
             ),
             market_edge AS (
                 SELECT id,
@@ -101,17 +114,20 @@ class NavigationService:
 
         # Create a new session
         with Session(db.engine) as session:
+            Logger.break_line()
+            Logger.log("Query: ", "red")
             print(query)
 
             # Execute the query and fetch all results
             result = session.execute(query).fetchall()
-            print(result)
 
         nodes = [{
             "latitude": row[2],
             "longitude": row[3],
         } for row in result]
 
+        Logger.break_line()
+        Logger.log("Result: ", "red")
         print(nodes)
 
         return nodes
@@ -140,17 +156,22 @@ class NavigationService:
 
         # Create a new session
         with Session(db.engine) as session:
+            Logger.break_line()
+            Logger.log("Query: ", "red")
             print(query)
 
             # Execute the query and fetch the first result
             result = session.execute(query).fetchone()
-            print(result)
 
         market = {
+            "id": result[0],
+            "name": result[1],
             "latitude": result[3],
             "longitude": result[2],
         }
 
+        Logger.break_line()
+        Logger.log("Result: ", "red")
         print(market)
 
         return market

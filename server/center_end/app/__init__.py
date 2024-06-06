@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 
 from app.configs.extensions import api
@@ -15,12 +14,13 @@ def create_app():
     api.add_namespace(market_ns)
     api.add_namespace(navigation_ns)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ege:0909@localhost:5433/ege'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kahler:3755@localhost:5432/term_project'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
     api.init_app(app)
 
-    Logger.log('I love Voroni 🐶', 'blue')
+    Logger.log('I love Voroni 🐶', 'red')
+    Logger.break_line()
 
     return app

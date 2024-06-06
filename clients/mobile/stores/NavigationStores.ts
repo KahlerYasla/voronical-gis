@@ -23,6 +23,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
     navigateToMarket: async (req: NavigationRequest) => {
         console.log("req: ", req);
 
+        const startX = parseFloat(req.start.split(" ")[0]);
+        const startY = parseFloat(req.start.split(" ")[1]);
+
         const url = `${API_BASE_URL}/navigation/shortest-path`;
         const headers = {
             'Accept': 'application/json',
@@ -40,7 +43,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
             if (Array.isArray(response.data)) {
                 const coordinates = response.data.map((point: { latitude: number; longitude: number }) => [point.latitude, point.longitude]);
-                const lineString: LineString = { coordinates };
+
+                // start point first then rest of the points
+                const lineString: LineString = { coordinates: [[startX, startY], ...coordinates] };
 
                 set({ lineString });
 
@@ -64,6 +69,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
     navigateToNearestMarket: async (req: NavigationRequest) => {
         console.log("req: ", req);
 
+        const startX = parseFloat(req.start.split(" ")[0]);
+        const startY = parseFloat(req.start.split(" ")[1]);
+
         const url = `${API_BASE_URL}/navigation/nearest-market`;
         const headers = {
             'Accept': 'application/json',
@@ -80,7 +88,9 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
 
             if (Array.isArray(response.data)) {
                 const coordinates = response.data.map((point: { latitude: number; longitude: number }) => [point.latitude, point.longitude]);
-                const lineString: LineString = { coordinates };
+
+                // start point first then rest of the points
+                const lineString: LineString = { coordinates: [[startX, startY], ...coordinates] };
 
                 set({ lineString });
 
