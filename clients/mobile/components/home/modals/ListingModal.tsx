@@ -36,13 +36,13 @@ const ListingModal: React.FC<ListingModal> = ({ closeModal }) => {
             >
                 <View style={styles.modal}>
                     <View style={styles.headers}>
-                        <Text style={styles.text0}>Market Name</Text>
+                        <Text style={styles.text0}>Id | Market Name</Text>
                         <Text style={styles.text1}>Voronoical Score</Text>
                     </View>
                     <ScrollView style={styles.listingGrid}>
                         {markets.map((market, index) => (
                             <View key={index} style={styles.listing}>
-                                <Text style={styles.listingText}>{market.id + ". " + market.name}</Text>
+                                <Text style={styles.listingText}>{market.id + " | " + market.name}</Text>
                                 <Text style={{ ...styles.listingText, backgroundColor: getColorWithinTheRange(market.voronoiScore) }}>{market.voronoiScore}</Text>
                             </View>
                         ))}
