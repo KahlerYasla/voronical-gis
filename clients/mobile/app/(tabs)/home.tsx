@@ -65,10 +65,6 @@ const Home = () => {
       }
     },
     {
-      text: 'Calculate Voronoical Insights',
-      onPress: () => setToggleVoronoi(!toggleVoronoi)
-    },
-    {
       text: 'Navigate from Star to Nearest Market',
       onPress: async () => {
         console.log('Navigate Nearest Market');

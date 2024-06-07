@@ -14,13 +14,13 @@ const ListingModal: React.FC<ListingModal> = ({ closeModal }) => {
 
     const getColorWithinTheRange = (voronoicalValue: number) => {
         if (voronoicalValue < 0.25) {
-            return "rgba(0, 255, 0, 0.5)";
+            return "rgba(0, 255, 0, 1)";
         } else if (voronoicalValue >= 0.25 && voronoicalValue < 0.5) {
-            return "rgba(255, 255, 0, 0.5)";
+            return "rgba(255, 255, 0, 1)";
         } else if (voronoicalValue >= 0.5 && voronoicalValue < 0.75) {
-            return "rgba(255, 165, 0, 0.5)";
+            return "rgba(255, 165, 0, 1)";
         } else {
-            return "rgba(255, 0, 0, 0.5)";
+            return "rgba(255, 0, 0, 1)";
         }
     }
 
