@@ -57,7 +57,7 @@ class NavigationRoute(Resource):
 class NavigationRoute(Resource):
     def get(self):
         # Call the navigation_service to get the voronoi diagram
-        voronoi = navigation_service.get_voronoi_diagram()
+        voronoi = navigation_service.get_voronoi_points()
 
         return jsonify(voronoi)
     

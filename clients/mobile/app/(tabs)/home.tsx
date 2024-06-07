@@ -8,7 +8,8 @@ import { logo, starIcon } from '@/constants/VisualAssets';
 
 // components
 import CustomButton from '@/components/shared/CustomButton';
-import MapInputField from '@/components/map/MapInputField';
+import MapInputField from '@/components/home/map/MapInputField';
+import ListingModal from '@/components/home/modals/ListingModal';
 
 // stores
 import { useMarketStore } from '@/stores/MarketStores';
@@ -16,10 +17,14 @@ import { useNavigationStore } from '@/stores/NavigationStores';
 import CustomText from '@/components/shared/CustomText';
 
 const Home = () => {
+  // states show/hide
   const [showCreateMarketModal, setShowCreateMarketModal] = useState(false);
-  const [toggleVoronoi, setToggleVoronoi] = useState(false);
-  const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
   const [showButtons, setShowButtons] = useState(false);
+  const [toggleVoronoi, setToggleVoronoi] = useState(false);
+  const [showListingModal, setShowListingModal] = useState(false);
+
+  // states data
+  const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
   const [name, setName] = useState('');
 
   // stores
@@ -46,8 +51,11 @@ const Home = () => {
       onPress: () => setToggleVoronoi(!toggleVoronoi)
     },
     {
-      text: 'Go to My Location',
-      onPress: () => console.log('My Location')
+      text: 'List Markets & Insights',
+      onPress: () => {
+        setShowListingModal(true);
+        setShowButtons(false);
+      }
     },
     {
       text: 'Create Market at Star Point',
@@ -55,6 +63,10 @@ const Home = () => {
         setShowCreateMarketModal(true);
         setShowButtons(false);
       }
+    },
+    {
+      text: 'Calculate Voronoical Insights',
+      onPress: () => setToggleVoronoi(!toggleVoronoi)
     },
     {
       text: 'Navigate from Star to Nearest Market',
@@ -224,6 +236,12 @@ const Home = () => {
           </View>
         </Modal>
       )}
+
+      {/* listing modal */}
+      {showListingModal && (
+        <ListingModal closeModal={() => setShowListingModal(false)} />
+      )}
+
     </View>
   );
 };

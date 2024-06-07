@@ -7,9 +7,10 @@ export interface Market {
     name: string;
     types: string;
     geom: string;
-    review_count: number;
+    reviewCount: number;
     latitude: number;
     longitude: number;
+    voronoiScore: number;
 }
 
 interface CreateMarketRequest {
