@@ -80,6 +80,8 @@ export const useMarketStore = create<MarketStore>((set) => ({
                 market.latitude = parseFloat(market.geom.split(',')[0]);
             });
 
+            console.log("API response first: ", response.data.slice(0, 3), "...");
+
             set({ markets: response.data });
         } catch (error) {
             const axiosError = error as AxiosError;

@@ -13,12 +13,17 @@ interface NavigationRequest {
 
 export interface NavigationStore {
     lineString: LineString;
+    voronoiPolygon: LineString;
+
     navigateToMarket: (from: NavigationRequest) => Promise<LineString>;
     navigateToNearestMarket: (from: NavigationRequest) => Promise<LineString>;
+
+    fetchVoronoiPolygon: () => Promise<LineString>;
 }
 
 export const useNavigationStore = create<NavigationStore>((set) => ({
     lineString: { coordinates: [] },
+    voronoiPolygon: { coordinates: [] },
 
     navigateToMarket: async (req: NavigationRequest) => {
         console.log("req: ", req);
@@ -108,7 +113,45 @@ export const useNavigationStore = create<NavigationStore>((set) => ({
             console.error("Status Code:", axiosError.response?.status);
             return { coordinates: [] };
         }
+    },
+
+
+    fetchVoronoiPolygon: async () => {
+        const url = `${API_BASE_URL}/navigation/voronoi`;
+        const headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        };
+
+        try {
+            const response = await axios.get(url, { headers });
+
+            // show first 5 points
+            console.log("API Response:", response.data.slice(0, 5), "...");
+
+            if (Array.isArray(response.data)) {
+                const coordinates = response.data.map((point: { latitude: number; longitude: number }) => [point.latitude, point.longitude]);
+
+                // start point first then rest of the points
+                const lineString: LineString = { coordinates };
+
+                set({ voronoiPolygon: lineString });
+
+                return lineString;
+            } else {
+                console.error("Invalid response structure:", response.data);
+                return { coordinates: [] };
+            }
+
+        } catch (error) {
+            const axiosError = error as AxiosError;
+            console.error("Axios Error:", axiosError.message);
+            console.error("Response Data:", axiosError.response?.data);
+            console.error("Status Code:", axiosError.response?.status);
+            return { coordinates: [] };
+        }
     }
 
-
-}));
+}
+)
+);

@@ -1,11 +1,8 @@
 from app.utils.logger import Logger
 
-from flask import Flask, jsonify, request
 from sqlalchemy.sql import text
 from sqlalchemy.orm import Session
 from app.configs.extensions import db
-
-app = Flask(__name__)
 
 class NavigationService:
     @staticmethod
@@ -231,12 +228,16 @@ class NavigationService:
             print(query)
 
             # Execute the query and fetch the first result
-            result = session.execute(query).fetchone()
+            result = session.execute(query).fetchall()
 
-        voronoi = {
-            "id": result[0],
-            "geom": result[1],
-        }
+            Logger.break_line()
+            Logger.log("Raw result: ", "red")
+            print(result)
+
+        voronoi = [{
+            "latitude": row[0],
+            "longitude": row[1],
+        } for row in result]
 
         Logger.break_line()
         Logger.log("Result: ", "red")

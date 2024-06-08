@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Modal, View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
 
 // stores
@@ -8,21 +9,21 @@ interface ListingModal {
 }
 
 const ListingModal: React.FC<ListingModal> = ({ closeModal }) => {
-
     // stores
     const markets = useMarketStore(state => state.markets);
 
     const getColorWithinTheRange = (voronoicalValue: number) => {
-        if (voronoicalValue < 0.25) {
-            return "rgba(0, 255, 0, 1)";
-        } else if (voronoicalValue >= 0.25 && voronoicalValue < 0.5) {
-            return "rgba(255, 255, 0, 1)";
-        } else if (voronoicalValue >= 0.5 && voronoicalValue < 0.75) {
-            return "rgba(255, 165, 0, 1)";
-        } else {
+        if (voronoicalValue < 2.5) {
             return "rgba(255, 0, 0, 1)";
+        } else if (voronoicalValue >= 2.5 && voronoicalValue < 5) {
+            return "rgba(255, 165, 0, 1)";
+        } else if (voronoicalValue >= 5 && voronoicalValue < 7.5) {
+            return "rgba(255, 255, 0, 1)";
+        } else {
+            return "rgba(0, 255, 0, 1)";
         }
     }
+
 
     return (
         <View>
@@ -43,7 +44,7 @@ const ListingModal: React.FC<ListingModal> = ({ closeModal }) => {
                         {markets.map((market, index) => (
                             <View key={index} style={styles.listing}>
                                 <Text style={styles.listingText}>{market.id + " | " + market.name}</Text>
-                                <Text style={{ ...styles.listingText, backgroundColor: getColorWithinTheRange(market.voronoiScore) }}>{market.voronoiScore}</Text>
+                                <Text style={{ ...styles.listingText, color: getColorWithinTheRange(market.voronoiScore) }}>{market.voronoiScore.toFixed(2)}</Text>
                             </View>
                         ))}
                     </ScrollView>
@@ -113,6 +114,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
-
 
 export default ListingModal;

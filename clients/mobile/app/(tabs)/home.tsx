@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, Text, Image } from 'react-native';
+
 import MapView, { Marker, Polyline, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Animatable from 'react-native-animatable';
 
@@ -36,6 +37,9 @@ const Home = () => {
   const navigateToMarket = useNavigationStore(state => state.navigateToMarket);
   const navigateToNearestMarket = useNavigationStore(state => state.navigateToNearestMarket);
 
+  const voroniPolygon = useNavigationStore(state => state.voronoiPolygon);
+  const fetchVoronoiPolygon = useNavigationStore(state => state.fetchVoronoiPolygon);
+
   const handleMapPress = (event: any) => {
     const { coordinate } = event.nativeEvent;
     setPosition(coordinate);
@@ -45,15 +49,45 @@ const Home = () => {
     setShowButtons(!showButtons);
   };
 
+  const getColorWithinTheRange = (voronoicalValue: number) => {
+    if (voronoicalValue < 2.5) {
+      return "rgba(255, 0, 0, 1)";
+    } else if (voronoicalValue >= 2.5 && voronoicalValue < 5) {
+      return "rgba(255, 165, 0, 1)";
+    } else if (voronoicalValue >= 5 && voronoicalValue < 7.5) {
+      return "rgba(255, 255, 0, 1)";
+    } else {
+      return "rgba(0, 255, 0, 1)";
+    }
+  }
+
   const buttonData = [
     {
       text: 'Toggle Voronoi',
-      onPress: () => setToggleVoronoi(!toggleVoronoi)
+      onPress: () => {
+        console.log('Toggle Voronoi');
+        fetchVoronoiPolygon();
+        setToggleVoronoi(!toggleVoronoi)
+      }
     },
     {
       text: 'List Markets & Insights',
       onPress: () => {
         setShowListingModal(true);
+        setShowButtons(false);
+      }
+    },
+    {
+      text: 'Which area should I open a new market?',
+      onPress: () => {
+        console.log('Open Market Area');
+        setShowButtons(false);
+      }
+    },
+    {
+      text: 'Which area should I close a market?',
+      onPress: () => {
+        console.log('Close Market Area');
         setShowButtons(false);
       }
     },
@@ -131,6 +165,15 @@ const Home = () => {
                 color: "white"
               }} />
             </View>
+            {toggleVoronoi && (
+              <Text style={{
+                backgroundColor: "black",
+                color: getColorWithinTheRange(market.voronoiScore),
+                fontSize: 12,
+                alignSelf: 'center',
+                paddingHorizontal: 20,
+              }}>{market.voronoiScore.toFixed(2)}</Text>
+            )}
             <Text style={styles.marketPin}>▼</Text>
           </Marker>
         ))}
@@ -169,6 +212,23 @@ const Home = () => {
           lineCap='square'
           lineJoin='round'
         />
+
+        {/* Voronoi Polygon */}
+        {toggleVoronoi && (
+          <Polyline
+            coordinates={voroniPolygon.coordinates.map((coord) => (
+              {
+                latitude: coord[0],
+                longitude: coord[1],
+              }
+            ))}
+            strokeWidth={5}
+            lineCap='square'
+            lineJoin='round'
+            strokeColor='purple'
+          />
+        )}
+
       </MapView>
 
       {/* Floating buttons */}

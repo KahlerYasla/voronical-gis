@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -25,6 +25,6 @@ export default function Index() {
     }
 
     return (
-        <Redirect href="/home" />
+        <Redirect href="/login" />
     );
 }
