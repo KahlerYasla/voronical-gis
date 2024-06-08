@@ -3,9 +3,7 @@
 --
 
 -- Dumped from database version 14.11 (Homebrew)
--- Dumped by pg_dump version 16.1
-
--- Started on 2024-06-08 00:25:09 +03
+-- Dumped by pg_dump version 15.5 (Homebrew)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +17,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 6 (class 2615 OID 2200)
 -- Name: public; Type: SCHEMA; Schema: -; Owner: kahler
 --
 
@@ -29,7 +26,6 @@ SET row_security = off;
 ALTER SCHEMA public OWNER TO kahler;
 
 --
--- TOC entry 2 (class 3079 OID 22579)
 -- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -37,8 +33,6 @@ CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA public;
 
 
 --
--- TOC entry 4944 (class 0 OID 0)
--- Dependencies: 2
 -- Name: EXTENSION postgis; Type: COMMENT; Schema: -; Owner: 
 --
 
@@ -46,7 +40,6 @@ COMMENT ON EXTENSION postgis IS 'PostGIS geometry and geography spatial types an
 
 
 --
--- TOC entry 3 (class 3079 OID 24830)
 -- Name: pgrouting; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -54,8 +47,6 @@ CREATE EXTENSION IF NOT EXISTS pgrouting WITH SCHEMA public;
 
 
 --
--- TOC entry 4945 (class 0 OID 0)
--- Dependencies: 3
 -- Name: EXTENSION pgrouting; Type: COMMENT; Schema: -; Owner: 
 --
 
@@ -67,7 +58,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 221 (class 1259 OID 25289)
 -- Name: edges; Type: TABLE; Schema: public; Owner: kahler
 --
 
@@ -84,7 +74,6 @@ CREATE TABLE public.edges (
 ALTER TABLE public.edges OWNER TO kahler;
 
 --
--- TOC entry 220 (class 1259 OID 25288)
 -- Name: edges_id_seq; Type: SEQUENCE; Schema: public; Owner: kahler
 --
 
@@ -97,11 +86,9 @@ CREATE SEQUENCE public.edges_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.edges_id_seq OWNER TO kahler;
+ALTER TABLE public.edges_id_seq OWNER TO kahler;
 
 --
--- TOC entry 4946 (class 0 OID 0)
--- Dependencies: 220
 -- Name: edges_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kahler
 --
 
@@ -109,7 +96,6 @@ ALTER SEQUENCE public.edges_id_seq OWNED BY public.edges.id;
 
 
 --
--- TOC entry 217 (class 1259 OID 23655)
 -- Name: markets; Type: TABLE; Schema: public; Owner: kahler
 --
 
@@ -126,7 +112,6 @@ CREATE TABLE public.markets (
 ALTER TABLE public.markets OWNER TO kahler;
 
 --
--- TOC entry 216 (class 1259 OID 23654)
 -- Name: markets_id_seq; Type: SEQUENCE; Schema: public; Owner: kahler
 --
 
@@ -139,11 +124,9 @@ CREATE SEQUENCE public.markets_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.markets_id_seq OWNER TO kahler;
+ALTER TABLE public.markets_id_seq OWNER TO kahler;
 
 --
--- TOC entry 4947 (class 0 OID 0)
--- Dependencies: 216
 -- Name: markets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kahler
 --
 
@@ -151,7 +134,6 @@ ALTER SEQUENCE public.markets_id_seq OWNED BY public.markets.id;
 
 
 --
--- TOC entry 219 (class 1259 OID 23672)
 -- Name: roads; Type: TABLE; Schema: public; Owner: kahler
 --
 
@@ -171,7 +153,6 @@ CREATE TABLE public.roads (
 ALTER TABLE public.roads OWNER TO kahler;
 
 --
--- TOC entry 218 (class 1259 OID 23671)
 -- Name: roads_id_seq; Type: SEQUENCE; Schema: public; Owner: kahler
 --
 
@@ -184,11 +165,9 @@ CREATE SEQUENCE public.roads_id_seq
     CACHE 1;
 
 
-ALTER SEQUENCE public.roads_id_seq OWNER TO kahler;
+ALTER TABLE public.roads_id_seq OWNER TO kahler;
 
 --
--- TOC entry 4948 (class 0 OID 0)
--- Dependencies: 218
 -- Name: roads_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: kahler
 --
 
@@ -196,7 +175,6 @@ ALTER SEQUENCE public.roads_id_seq OWNED BY public.roads.id;
 
 
 --
--- TOC entry 4775 (class 2604 OID 25292)
 -- Name: edges id; Type: DEFAULT; Schema: public; Owner: kahler
 --
 
@@ -204,7 +182,6 @@ ALTER TABLE ONLY public.edges ALTER COLUMN id SET DEFAULT nextval('public.edges_
 
 
 --
--- TOC entry 4773 (class 2604 OID 23658)
 -- Name: markets id; Type: DEFAULT; Schema: public; Owner: kahler
 --
 
@@ -212,7 +189,6 @@ ALTER TABLE ONLY public.markets ALTER COLUMN id SET DEFAULT nextval('public.mark
 
 
 --
--- TOC entry 4774 (class 2604 OID 23675)
 -- Name: roads id; Type: DEFAULT; Schema: public; Owner: kahler
 --
 
@@ -220,8 +196,6 @@ ALTER TABLE ONLY public.roads ALTER COLUMN id SET DEFAULT nextval('public.roads_
 
 
 --
--- TOC entry 4937 (class 0 OID 25289)
--- Dependencies: 221
 -- Data for Name: edges; Type: TABLE DATA; Schema: public; Owner: kahler
 --
 
@@ -4601,8 +4575,6 @@ COPY public.edges (id, source, target, cost, reverse_cost, the_geom) FROM stdin;
 
 
 --
--- TOC entry 4933 (class 0 OID 23655)
--- Dependencies: 217
 -- Data for Name: markets; Type: TABLE DATA; Schema: public; Owner: kahler
 --
 
@@ -4745,8 +4717,6 @@ COPY public.markets (id, name, geom, types, rating, review_count) FROM stdin;
 
 
 --
--- TOC entry 4935 (class 0 OID 23672)
--- Dependencies: 219
 -- Data for Name: roads; Type: TABLE DATA; Schema: public; Owner: kahler
 --
 
@@ -9126,8 +9096,6 @@ COPY public.roads (id, geom, osm_id, name, ref, type, oneway, bridge, maxspeed) 
 
 
 --
--- TOC entry 4772 (class 0 OID 22896)
--- Dependencies: 212
 -- Data for Name: spatial_ref_sys; Type: TABLE DATA; Schema: public; Owner: kahler
 --
 
@@ -9136,8 +9104,6 @@ COPY public.spatial_ref_sys (srid, auth_name, auth_srid, srtext, proj4text) FROM
 
 
 --
--- TOC entry 4949 (class 0 OID 0)
--- Dependencies: 220
 -- Name: edges_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kahler
 --
 
@@ -9145,8 +9111,6 @@ SELECT pg_catalog.setval('public.edges_id_seq', 8742, true);
 
 
 --
--- TOC entry 4950 (class 0 OID 0)
--- Dependencies: 216
 -- Name: markets_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kahler
 --
 
@@ -9154,8 +9118,6 @@ SELECT pg_catalog.setval('public.markets_id_seq', 137, true);
 
 
 --
--- TOC entry 4951 (class 0 OID 0)
--- Dependencies: 218
 -- Name: roads_id_seq; Type: SEQUENCE SET; Schema: public; Owner: kahler
 --
 
@@ -9163,7 +9125,6 @@ SELECT pg_catalog.setval('public.roads_id_seq', 4371, true);
 
 
 --
--- TOC entry 4784 (class 2606 OID 25296)
 -- Name: edges edges_pkey; Type: CONSTRAINT; Schema: public; Owner: kahler
 --
 
@@ -9172,7 +9133,6 @@ ALTER TABLE ONLY public.edges
 
 
 --
--- TOC entry 4780 (class 2606 OID 23662)
 -- Name: markets markets_pkey; Type: CONSTRAINT; Schema: public; Owner: kahler
 --
 
@@ -9181,7 +9141,6 @@ ALTER TABLE ONLY public.markets
 
 
 --
--- TOC entry 4782 (class 2606 OID 23677)
 -- Name: roads roads_pkey; Type: CONSTRAINT; Schema: public; Owner: kahler
 --
 
@@ -9190,7 +9149,6 @@ ALTER TABLE ONLY public.roads
 
 
 --
--- TOC entry 4785 (class 1259 OID 25297)
 -- Name: edges_source_idx; Type: INDEX; Schema: public; Owner: kahler
 --
 
@@ -9198,7 +9156,6 @@ CREATE INDEX edges_source_idx ON public.edges USING btree (source);
 
 
 --
--- TOC entry 4786 (class 1259 OID 25298)
 -- Name: edges_target_idx; Type: INDEX; Schema: public; Owner: kahler
 --
 
@@ -9206,7 +9163,6 @@ CREATE INDEX edges_target_idx ON public.edges USING btree (target);
 
 
 --
--- TOC entry 4787 (class 1259 OID 25299)
 -- Name: edges_the_geom_idx; Type: INDEX; Schema: public; Owner: kahler
 --
 
@@ -9214,16 +9170,12 @@ CREATE INDEX edges_the_geom_idx ON public.edges USING gist (the_geom);
 
 
 --
--- TOC entry 4943 (class 0 OID 0)
--- Dependencies: 6
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: kahler
 --
 
 REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
-
--- Completed on 2024-06-08 00:25:09 +03
 
 --
 -- PostgreSQL database dump complete
