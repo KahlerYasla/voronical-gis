@@ -27,6 +27,7 @@ const Home = () => {
 
   // states data
   const [position, setPosition] = useState({ latitude: 41.044, longitude: 29.008 });
+  const [camera, setCamera] = useState({ latitude: 41.044, longitude: 29.008 });
   const [name, setName] = useState('');
 
   // stores
@@ -87,6 +88,16 @@ const Home = () => {
       text: 'Which area should I open a new market?',
       onPress: () => {
         console.log('Open Market Area');
+
+        // find the market with the highest voronoi score and set camera to that location slowly with animation
+        const maxVoronoiScoreMarket = markets.reduce((prev, current) => {
+          return (prev.voronoiScore > current.voronoiScore) ? prev : current;
+        });
+
+        setCamera({
+          latitude: maxVoronoiScoreMarket.latitude,
+          longitude: maxVoronoiScoreMarket.longitude,
+        });
         setShowButtons(false);
       }
     },
@@ -95,6 +106,17 @@ const Home = () => {
       text: 'Which area should I close a market?',
       onPress: () => {
         console.log('Close Market Area');
+
+        // find the market with the lowest voronoi score and set camera to that location slowly with animation
+        const minVoronoiScoreMarket = markets.reduce((prev, current) => {
+          return (prev.voronoiScore < current.voronoiScore) ? prev : current;
+        });
+
+        setCamera({
+          latitude: minVoronoiScoreMarket.latitude,
+          longitude: minVoronoiScoreMarket.longitude,
+        });
+
         setShowButtons(false);
       }
     },
@@ -142,8 +164,8 @@ const Home = () => {
         onPress={handleMapPress}
         camera={{
           center: {
-            latitude: 41.044,
-            longitude: 29.008,
+            latitude: camera.latitude,
+            longitude: camera.longitude,
           },
           pitch: 60,
           heading: 0,
