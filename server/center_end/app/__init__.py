@@ -5,6 +5,7 @@ from app.configs.extensions import db
 
 from app.routes.market_route import ns as market_ns
 from app.routes.navigation_route import ns as navigation_ns
+from app.routes.auth_route import ns as auth_ns
 
 from app.utils.logger import Logger
 
@@ -13,6 +14,7 @@ def create_app():
  
     api.add_namespace(market_ns)
     api.add_namespace(navigation_ns)
+    api.add_namespace(auth_ns)
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://kahler:3755@localhost:5432/term_project'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -20,7 +22,7 @@ def create_app():
     db.init_app(app)
     api.init_app(app)
 
-    Logger.log('I love Voroni 🐶', 'red')
+    Logger.log('I love Voroni 🐶', 'r')
     Logger.break_line()
 
     return app

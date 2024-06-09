@@ -11,11 +11,12 @@ import { logo, starIcon } from '@/constants/VisualAssets';
 import CustomButton from '@/components/shared/CustomButton';
 import MapInputField from '@/components/home/map/MapInputField';
 import ListingModal from '@/components/home/modals/ListingModal';
+import CustomText from '@/components/shared/CustomText';
 
 // stores
-import { useMarketStore } from '@/stores/MarketStores';
-import { useNavigationStore } from '@/stores/NavigationStores';
-import CustomText from '@/components/shared/CustomText';
+import { useMarketStore } from '@/stores/MarketStore';
+import { useNavigationStore } from '@/stores/NavigationStore';
+import { useAuthStore } from '@/stores/AuthStore';
 
 const Home = () => {
   // states show/hide
@@ -40,6 +41,8 @@ const Home = () => {
   const voroniPolygon = useNavigationStore(state => state.voronoiPolygon);
   const fetchVoronoiPolygon = useNavigationStore(state => state.fetchVoronoiPolygon);
 
+  const authCredentials = useAuthStore(state => state.credentials);
+
   const handleMapPress = (event: any) => {
     const { coordinate } = event.nativeEvent;
     setPosition(coordinate);
@@ -63,6 +66,7 @@ const Home = () => {
 
   const buttonData = [
     {
+      userRole: "marketer",
       text: 'Toggle Voronoi',
       onPress: () => {
         console.log('Toggle Voronoi');
@@ -71,6 +75,7 @@ const Home = () => {
       }
     },
     {
+      userRole: "marketer",
       text: 'List Markets & Insights',
       onPress: () => {
         setShowListingModal(true);
@@ -78,6 +83,7 @@ const Home = () => {
       }
     },
     {
+      userRole: "marketer",
       text: 'Which area should I open a new market?',
       onPress: () => {
         console.log('Open Market Area');
@@ -85,6 +91,7 @@ const Home = () => {
       }
     },
     {
+      userRole: "marketer",
       text: 'Which area should I close a market?',
       onPress: () => {
         console.log('Close Market Area');
@@ -92,6 +99,7 @@ const Home = () => {
       }
     },
     {
+      userRole: "marketer",
       text: 'Create Market at Star Point',
       onPress: () => {
         setShowCreateMarketModal(true);
@@ -99,6 +107,7 @@ const Home = () => {
       }
     },
     {
+      userRole: "user",
       text: 'Navigate from Star to Nearest Market',
       onPress: async () => {
         console.log('Navigate Nearest Market');
@@ -112,6 +121,7 @@ const Home = () => {
       }
     },
     {
+      userRole: "user",
       text: 'Navigate from Star to Selected Market',
       onPress: () => {
 
@@ -234,6 +244,7 @@ const Home = () => {
       {/* Floating buttons */}
       <View style={styles.floatingButtonContainer}>
         {showButtons && buttonData.map((button, index) => (
+          button.userRole === authCredentials!.userRole &&
           <Animatable.View
             key={index}
             animation="fadeInUp"

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Modal, View, StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
 
 // stores
-import { useMarketStore } from "@/stores/MarketStores";
+import { useMarketStore } from "@/stores/MarketStore";
 
 interface ListingModal {
     closeModal: () => void;

@@ -14,7 +14,7 @@ class NavigationService:
             end_location = f"{end_location['latitude']} {end_location['longitude']}"
 
         Logger.break_line()
-        Logger.log("Shortest Path Flow: ", "red")
+        Logger.log("Shortest Path Flow: ", "r")
 
         print("Start Location: ", start_location)
         print("End Location: ", end_location)
@@ -31,11 +31,11 @@ class NavigationService:
         end_longitude = end_location[1]
 
         Logger.break_line()
-        Logger.log("Start latitude, longitude: ", "red")
+        Logger.log("Start latitude, longitude: ", "r")
         print(start_latitude + ", " + start_longitude)
 
         Logger.break_line()
-        Logger.log("End latitude, longitude: ", "red")
+        Logger.log("End latitude, longitude: ", "r")
         print(end_latitude + ", " + end_longitude)
 
         # Define the SQL query
@@ -112,7 +112,7 @@ class NavigationService:
         # Create a new session
         with Session(db.engine) as session:
             Logger.break_line()
-            Logger.log("Query: ", "red")
+            Logger.log("Query: ", "r")
             print(query)
 
             # Execute the query and fetch all results
@@ -124,7 +124,7 @@ class NavigationService:
         } for row in result]
 
         Logger.break_line()
-        Logger.log("Result: ", "red")
+        Logger.log("Result: ", "r")
         print(nodes)
 
         return nodes
@@ -154,7 +154,7 @@ class NavigationService:
         # Create a new session
         with Session(db.engine) as session:
             Logger.break_line()
-            Logger.log("Query: ", "red")
+            Logger.log("Query: ", "r")
             print(query)
 
             # Execute the query and fetch the first result
@@ -168,7 +168,7 @@ class NavigationService:
         }
 
         Logger.break_line()
-        Logger.log("Result: ", "red")
+        Logger.log("Result: ", "r")
         print(market)
 
         return market
@@ -177,7 +177,7 @@ class NavigationService:
     @staticmethod
     def get_voronoi_points():
         Logger.break_line()
-        Logger.log("Voronoi Diagram Flow: ", "red")
+        Logger.log("Voronoi Diagram Flow: ", "r")
 
         # Define the SQL query
         query = text("""
@@ -224,14 +224,14 @@ class NavigationService:
         # Create a new session
         with Session(db.engine) as session:
             Logger.break_line()
-            Logger.log("Query: ", "red")
+            Logger.log("Query: ", "r")
             print(query)
 
             # Execute the query and fetch the first result
             result = session.execute(query).fetchall()
 
             Logger.break_line()
-            Logger.log("Raw result: ", "red")
+            Logger.log("Raw result: ", "r")
             print(result)
 
         voronoi = [{
@@ -240,7 +240,7 @@ class NavigationService:
         } for row in result]
 
         Logger.break_line()
-        Logger.log("Result: ", "red")
+        Logger.log("Result: ", "r")
         print(voronoi)
 
         return voronoi

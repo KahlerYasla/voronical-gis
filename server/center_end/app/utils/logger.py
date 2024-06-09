@@ -20,16 +20,28 @@ class Logger:
 
     # Define a dictionary of color options
     color_options = {
-        'red': Fore.RED,
-        'blue': Fore.BLUE,
-        'green': Fore.GREEN,
-        'yellow': Fore.YELLOW,
-        'orange': Fore.LIGHTYELLOW_EX,
-        'white': Fore.WHITE
+        'r': Fore.RED,
+        'b': Fore.BLUE,
+        'g': Fore.GREEN,
+        'y': Fore.YELLOW,
+        'o': Fore.LIGHTYELLOW_EX,
+        'w': Fore.WHITE
     }
 
     @staticmethod
-    def log(message, color='white'):
+    def _(message, color='w'):
+        Logger.logger.debug("-" * 100)
+        # Check if the selected color is valid
+        if color in Logger.color_options:
+            color_code = Logger.color_options[color]
+            lines = message.split('\n')
+            for line in lines:
+                Logger.logger.debug(color_code + line + Style.RESET_ALL)
+        else:
+            Logger.logger.debug("Invalid color option. Please select one of the available colors.")
+
+    @staticmethod
+    def log(message, color='w'):
         # Check if the selected color is valid
         if color in Logger.color_options:
             color_code = Logger.color_options[color]
